@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.3
+# 0.3.4
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| e7f7a44 | 2021-04-26 | Chris Schubert | Disable UI when auto-path, fix of path resolution |
 | 9d72afa | 2021-04-26 | Chris Schubert | Adding version to path resolution for package |
 | c15f514 | 2021-04-26 | Chris Schubert | Changes to support package + development workflow |
 | a89266d | 2021-04-26 | Chris Schubert | Updating for assembly creation |
