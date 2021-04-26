@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| e3c7e2c | 2021-04-26 | Chris Schubert | Fixing UI issues |
+
+
+ ## Tag: v0.3.5
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | 09bd435 | 2021-04-26 | Chris Schubert | Fixing API Key retrieval |
 
 
