@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 09bd435 | 2021-04-26 | Chris Schubert | Fixing API Key retrieval |
+
+
+ ## Tag: v0.3.4
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | e7f7a44 | 2021-04-26 | Chris Schubert | Disable UI when auto-path, fix of path resolution |
 
 
