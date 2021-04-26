@@ -1,7 +1,7 @@
 {
   "name": "com.appalachia.unity3d.editor.wakatime",
   "displayName": "Wakatime for Unity3D",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "unity": "2020.3",
   "description": "Wakatime Tracker for Appalachia Interactive",
   "keywords": [

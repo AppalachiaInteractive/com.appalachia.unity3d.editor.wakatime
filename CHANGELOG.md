@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| c15f514 | 2021-04-26 | Chris Schubert | Changes to support package + development workflow |
+
+
+ ## Tag: v0.3.1
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | a89266d | 2021-04-26 | Chris Schubert | Updating for assembly creation |
 
 

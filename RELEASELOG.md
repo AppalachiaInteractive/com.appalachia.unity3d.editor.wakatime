@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.1
+# 0.3.2
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| c15f514 | 2021-04-26 | Chris Schubert | Changes to support package + development workflow |
 | a89266d | 2021-04-26 | Chris Schubert | Updating for assembly creation |
 | d6415e3 | 2021-04-26 | Chris Schubert | Updating project name |
 | 0b9fb08 | 2021-04-26 | Chris Schubert | Removing .envrc |
