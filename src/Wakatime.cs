@@ -2,15 +2,12 @@
 
 #region
 
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 #endregion
@@ -48,12 +45,11 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-
             if (EditorPrefs.HasKey(Configuration.WakaTimePathAutoPref))
             {
                 Configuration.WakaTimePathAuto = EditorPrefs.GetBool(Configuration.WakaTimePathAutoPref);
             }
-            
+
             if (EditorPrefs.HasKey(Configuration.WakaTimePathPref))
             {
                 Configuration.WakaTimePath = EditorPrefs.GetString(Configuration.WakaTimePathPref);
@@ -79,7 +75,6 @@ namespace Appalachia.WakaTime
                 SendHeartbeat();
                 Events.LinkCallbacks();
             };
-
         }
 
         /// <summary>
@@ -117,10 +112,9 @@ namespace Appalachia.WakaTime
                 SendHeartbeatInternal(fromSave, callerMemberName);
             }
         }
-        
+
         private static void SendHeartbeatInternal(bool fromSave, string callerMemberName)
         {
-
             var scene = SceneManager.GetActiveScene();
             var scenePath = scene.path;
             var sceneFilePath = scenePath != string.Empty ? Application.dataPath + "/" + scenePath.Substring("Assets/".Length) : string.Empty;
@@ -137,13 +131,12 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-            
             var basePath = Configuration.WakaTimePathAuto ? Configuration.GetAutoWakaTimePath() : Configuration.WakaTimePath;
             var wakatimePath = Path.Combine(basePath, "src\\wakatime~\\wakatime\\cli.py");
             var cliTargetPath = $"\"{wakatimePath}\"";
-            
+
             var process = new Process();
-            var processStartInfo = new ProcessStartInfo()
+            var processStartInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,
                 FileName = "python",
@@ -160,7 +153,6 @@ namespace Appalachia.WakaTime
                 RedirectStandardOutput = true
             };
 
-
             process.StartInfo = processStartInfo;
 
             process.Start();
@@ -175,7 +167,7 @@ namespace Appalachia.WakaTime
                 _lastHeartbeat = heartbeat;
             }
             else
-            {    
+            {
                 Logger.Log(processStartInfo.Arguments);
                 Logger.LogError($"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin.");
             }
