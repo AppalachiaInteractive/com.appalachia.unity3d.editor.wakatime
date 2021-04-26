@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.2
+# 0.3.3
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 9d72afa | 2021-04-26 | Chris Schubert | Adding version to path resolution for package |
 | c15f514 | 2021-04-26 | Chris Schubert | Changes to support package + development workflow |
 | a89266d | 2021-04-26 | Chris Schubert | Updating for assembly creation |
 | d6415e3 | 2021-04-26 | Chris Schubert | Updating project name |

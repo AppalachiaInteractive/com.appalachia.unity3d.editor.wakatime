@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 9d72afa | 2021-04-26 | Chris Schubert | Adding version to path resolution for package |
+
+
+ ## Tag: v0.3.2
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | c15f514 | 2021-04-26 | Chris Schubert | Changes to support package + development workflow |
 
 
