@@ -7,7 +7,7 @@ namespace Appalachia.WakaTime
     internal struct Heartbeat
     {
         private static readonly DateTime _epoch = new DateTime(1970, 1, 1);
-        
+
         public string entity;
         public string type;
         public float time;

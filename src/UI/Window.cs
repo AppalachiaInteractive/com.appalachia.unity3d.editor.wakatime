@@ -7,6 +7,7 @@ namespace Appalachia.WakaTime.UI
     public class Window : EditorWindow
     {
         private string _apiKey = "";
+        private bool _wakatimePathAuto = true;
         private string _wakatimePath = "";
         private string _projectName = "";
         private bool _enabled = true;
@@ -26,6 +27,7 @@ namespace Appalachia.WakaTime.UI
         void OnGUI()
         {
             _enabled = EditorGUILayout.Toggle("Enable WakaTime", _enabled);
+            _wakatimePathAuto = EditorGUILayout.ToggleLeft("WakaTime Auto Path", _wakatimePathAuto);
             _wakatimePath = EditorGUILayout.TextField("WakaTime Path", _wakatimePath);
             _apiKey = EditorGUILayout.TextField("API key", _apiKey);
             EditorGUILayout.LabelField("Project name", _projectName);
@@ -42,7 +44,8 @@ namespace Appalachia.WakaTime.UI
 
             if (GUILayout.Button("Save Preferences"))
             {
-                EditorPrefs.SetString(Configuration.WakatimePathPref, _wakatimePath);
+                EditorPrefs.SetBool(Configuration.WakaTimePathAutoPref, _wakatimePathAuto);
+                EditorPrefs.SetString(Configuration.WakaTimePathPref, _wakatimePath);
                 EditorPrefs.SetString(Configuration.ApiKeyPref, _apiKey);
                 EditorPrefs.SetBool(Configuration.EnabledPref, _enabled);
                 EditorPrefs.SetBool(Configuration.DebugPref,   _debug);
@@ -62,7 +65,8 @@ namespace Appalachia.WakaTime.UI
                 _needToReload = false;
             }
 
-            if (EditorPrefs.HasKey(Configuration.WakatimePath)) _wakatimePath = EditorPrefs.GetString(Configuration.WakatimePath);
+            if (EditorPrefs.HasKey(Configuration.WakaTimePathAutoPref)) _wakatimePathAuto = EditorPrefs.GetBool(Configuration.WakaTimePathAutoPref);
+            if (EditorPrefs.HasKey(Configuration.WakaTimePathPref)) _wakatimePath = EditorPrefs.GetString(Configuration.WakaTimePathPref);
             if (EditorPrefs.HasKey(Configuration.ApiKeyPref)) _apiKey = EditorPrefs.GetString(Configuration.ApiKeyPref);
             if (EditorPrefs.HasKey(Configuration.EnabledPref)) _enabled = EditorPrefs.GetBool(Configuration.EnabledPref);
             if (EditorPrefs.HasKey(Configuration.DebugPref)) _debug = EditorPrefs.GetBool(Configuration.DebugPref);

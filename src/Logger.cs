@@ -10,7 +10,7 @@ namespace Appalachia.WakaTime
         {
             return $"{Configuration.LogPrefix} ";
         }
-        
+
         internal static void Log(string message)
         {
             Debug.Log($"{GetLogPrefix()}{message}");
@@ -25,6 +25,7 @@ namespace Appalachia.WakaTime
         {
             Debug.LogError($"{GetLogPrefix()}{message}");
         }
+
         internal static void DebugLog(string message)
         {
             if (Configuration.Debugging)

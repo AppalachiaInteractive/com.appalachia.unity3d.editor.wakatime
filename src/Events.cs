@@ -8,9 +8,6 @@ namespace Appalachia.WakaTime
 {
     internal class Events
     {
-
-
-
         internal static void LinkCallbacks(bool clean = false)
         {
             if (clean)
@@ -23,11 +20,12 @@ namespace Appalachia.WakaTime
                 EditorApplication.quitting -= EditorApplicationOnquitting;
                 EditorApplication.pauseStateChanged -= EditorApplicationOnpauseStateChanged;
                 EditorApplication.playModeStateChanged -= EditorApplicationOnplayModeStateChanged;
-                EditorSceneManager.sceneLoaded -= EditorSceneManagerOnsceneLoaded;
-                EditorSceneManager.sceneUnloaded -= EditorSceneManagerOnsceneUnloaded;
+                SceneManager.sceneLoaded -= EditorSceneManagerOnsceneLoaded;
+                SceneManager.sceneUnloaded -= EditorSceneManagerOnsceneUnloaded;
                 EditorSceneManager.sceneOpened -= EditorSceneManagerOnsceneOpened;
                 EditorSceneManager.sceneClosed -= EditorSceneManagerOnsceneClosed;
                 EditorSceneManager.newSceneCreated -= EditorSceneManagerOnnewSceneCreated;
+
                 //EditorSceneManager.sceneSaved -= EditorSceneManagerOnsceneSaved;
                 EditorSceneManager.sceneDirtied -= EditorSceneManagerOnsceneDirtied;
             }
@@ -40,11 +38,12 @@ namespace Appalachia.WakaTime
             EditorApplication.quitting += EditorApplicationOnquitting;
             EditorApplication.pauseStateChanged += EditorApplicationOnpauseStateChanged;
             EditorApplication.playModeStateChanged += EditorApplicationOnplayModeStateChanged;
-            EditorSceneManager.sceneLoaded += EditorSceneManagerOnsceneLoaded;
-            EditorSceneManager.sceneUnloaded += EditorSceneManagerOnsceneUnloaded;
+            SceneManager.sceneLoaded += EditorSceneManagerOnsceneLoaded;
+            SceneManager.sceneUnloaded += EditorSceneManagerOnsceneUnloaded;
             EditorSceneManager.sceneOpened += EditorSceneManagerOnsceneOpened;
             EditorSceneManager.sceneClosed += EditorSceneManagerOnsceneClosed;
             EditorSceneManager.newSceneCreated += EditorSceneManagerOnnewSceneCreated;
+
             //EditorSceneManager.sceneSaved += EditorSceneManagerOnsceneSaved;
             EditorSceneManager.sceneDirtied += EditorSceneManagerOnsceneDirtied;
         }
@@ -124,6 +123,5 @@ namespace Appalachia.WakaTime
             WakaTime.SendHeartbeat();
         }
     }
-
 }
 #endif

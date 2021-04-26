@@ -48,9 +48,15 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-            if (EditorPrefs.HasKey(Configuration.WakatimePathPref))
+
+            if (EditorPrefs.HasKey(Configuration.WakaTimePathAutoPref))
             {
-                Configuration.WakatimePath = EditorPrefs.GetString(Configuration.WakatimePathPref);
+                Configuration.WakaTimePathAuto = EditorPrefs.GetBool(Configuration.WakaTimePathAutoPref);
+            }
+            
+            if (EditorPrefs.HasKey(Configuration.WakaTimePathPref))
+            {
+                Configuration.WakaTimePath = EditorPrefs.GetString(Configuration.WakaTimePathPref);
             }
 
             if (EditorPrefs.HasKey(Configuration.ApiKeyPref))
@@ -68,8 +74,12 @@ namespace Appalachia.WakaTime
 
             Logger.DebugLog("Initializing...");
 
-            SendHeartbeat();
-            Events.LinkCallbacks();
+            EditorApplication.delayCall += () =>
+            {
+                SendHeartbeat();
+                Events.LinkCallbacks();
+            };
+
         }
 
         /// <summary>
@@ -79,7 +89,7 @@ namespace Appalachia.WakaTime
         /// <returns>Lines of .wakatime-project or null if file not found</returns>
         public static string[] GetProjectFile()
         {
-            return !File.Exists(Configuration.WakatimeProjectFile) ? null : File.ReadAllLines(Configuration.WakatimeProjectFile);
+            return !File.Exists(Configuration.WakaTimeProjectFile) ? null : File.ReadAllLines(Configuration.WakaTimeProjectFile);
         }
 
         /// <summary>
@@ -95,7 +105,7 @@ namespace Appalachia.WakaTime
         /// <param name="content"></param>
         public static void SetProjectFile(string[] content)
         {
-            File.WriteAllLines(Configuration.WakatimeProjectFile, content);
+            File.WriteAllLines(Configuration.WakaTimeProjectFile, content);
         }
 
         internal static void SendHeartbeat(bool fromSave = false, [CallerMemberName] string callerMemberName = "")
@@ -128,9 +138,11 @@ namespace Appalachia.WakaTime
             }
 
             
-            var process = new Process();
-            var wakatimePath = Path.Combine(Configuration.WakatimePath, "cli.py");
+            var basePath = Configuration.WakaTimePathAuto ? Configuration.GetAutoWakaTimePath() : Configuration.WakaTimePath;
+            var wakatimePath = Path.Combine(basePath, "src\\wakatime~\\wakatime\\cli.py");
             var cliTargetPath = $"\"{wakatimePath}\"";
+            
+            var process = new Process();
             var processStartInfo = new ProcessStartInfo()
             {
                 CreateNoWindow = true,
@@ -165,7 +177,7 @@ namespace Appalachia.WakaTime
             else
             {    
                 Logger.Log(processStartInfo.Arguments);
-                Logger.LogError($"Unable to utilize Wakatime CLI: [{error}].  Disable this plugin.");
+                Logger.LogError($"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin.");
             }
         }
 
@@ -181,7 +193,7 @@ namespace Appalachia.WakaTime
         /// <returns><see cref="Application.productName" /> or first line of .wakatime-project</returns>
         private static string GetProjectName()
         {
-            return File.Exists(Configuration.WakatimeProjectFile) ? File.ReadAllLines(Configuration.WakatimeProjectFile)[0] : Application.productName;
+            return File.Exists(Configuration.WakaTimeProjectFile) ? File.ReadAllLines(Configuration.WakaTimeProjectFile)[0] : Application.productName;
         }
     }
 }
