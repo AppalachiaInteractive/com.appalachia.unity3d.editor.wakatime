@@ -9,9 +9,10 @@
 ```
 
 
-# 0.2.0
+# 0.3.0
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| d6415e3 | 2021-04-26 | Chris Schubert | Updating project name |
 | 0b9fb08 | 2021-04-26 | Chris Schubert | Removing .envrc |
 | c97e626 | 2021-04-26 | Chris Schubert | Updating to use WakaTime cli |
 | bc115dc | 2021-04-25 | Chris Schubert | Adding banner to README.md |
