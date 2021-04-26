@@ -1,5 +1,5 @@
 {
-  "name": "com.appalachia.unity3d.wakatime",
+  "name": "com.appalachia.unity3d.editor.wakatime",
   "displayName": "Wakatime for Unity3D",
   "version": "0.2.0",
   "unity": "2020.3",
@@ -15,7 +15,7 @@
   },
   "dependencies": {},
   "repository": {
-    "url": "https://github.com/AppalachiaInteractive/com.appalachia.unity3d.wakatime.git",
+    "url": "https://github.com/AppalachiaInteractive/com.appalachia.unity3d.editor.wakatime.git",
     "type": "git"
   },
   "publishConfig": {

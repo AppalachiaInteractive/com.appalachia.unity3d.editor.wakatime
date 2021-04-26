@@ -14,7 +14,7 @@
   |_____| [___][___||__||__]'.__.'
 
 ```
-## com.appalachia.unity3d.wakatime
+## com.appalachia.unity3d.editor.wakatime
 ### Created by Appalachia Interactive
 
 Wakatime Tracker for Appalachia Interactive
