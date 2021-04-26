@@ -72,15 +72,19 @@ namespace Appalachia.WakaTime.UI
                 _wakatimePathAuto = EditorPrefs.GetBool(Configuration.WakaTimePathAutoPref);
             }
 
+            GUI.enabled = !_wakatimePathAuto;
+            
             if (EditorPrefs.HasKey(Configuration.WakaTimePathPref))
             {
                 _wakatimePath = EditorPrefs.GetString(Configuration.WakaTimePathPref);
             }
 
-            if (EditorPrefs.HasKey(Configuration.ApiKeyPref))
+            GUI.enabled = true;
+
+            /*if (EditorPrefs.HasKey(Configuration.ApiKeyPref))
             {
                 _apiKey = EditorPrefs.GetString(Configuration.ApiKeyPref);
-            }
+            }*/
 
             if (EditorPrefs.HasKey(Configuration.EnabledPref))
             {

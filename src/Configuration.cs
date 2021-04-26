@@ -45,7 +45,7 @@ namespace Appalachia.WakaTime
             var package = GetWakaTimePackage();
             if (package != null)
             {
-                return $"{package.resolvedPath}@{package.version}";
+                return $"{package.resolvedPath}";
             }
 
             return WakaTimePath ?? "Assets\\wakatime\\";
