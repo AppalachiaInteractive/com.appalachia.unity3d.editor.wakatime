@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.0
+# 0.3.1
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| a89266d | 2021-04-26 | Chris Schubert | Updating for assembly creation |
 | d6415e3 | 2021-04-26 | Chris Schubert | Updating project name |
 | 0b9fb08 | 2021-04-26 | Chris Schubert | Removing .envrc |
 | c97e626 | 2021-04-26 | Chris Schubert | Updating to use WakaTime cli |

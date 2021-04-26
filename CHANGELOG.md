@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| a89266d | 2021-04-26 | Chris Schubert | Updating for assembly creation |
+
+
+ ## Tag: v0.3.0
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | d6415e3 | 2021-04-26 | Chris Schubert | Updating project name |
 
 
