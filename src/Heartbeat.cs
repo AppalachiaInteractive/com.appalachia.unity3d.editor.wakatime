@@ -6,7 +6,7 @@ namespace Appalachia.WakaTime
 {
     internal struct Heartbeat
     {
-        private static DateTime _epoch = new DateTime(1970, 1, 1);
+        private static readonly DateTime _epoch = new DateTime(1970, 1, 1);
         
         public string entity;
         public string type;
@@ -25,7 +25,7 @@ namespace Appalachia.WakaTime
             time = (float) DateTime.UtcNow.Subtract(_epoch).TotalSeconds;
             project = WakaTime.ProjectName;
             plugin = "unity-wakatime";
-            branch = "master";
+            branch = "main";
             language = "unity";
             isWrite = save;
             isDebugging = Configuration.Debugging;

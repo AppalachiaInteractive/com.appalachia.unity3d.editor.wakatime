@@ -2,7 +2,10 @@
 
 #region
 
+using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -15,9 +18,10 @@ using UnityEngine.SceneManagement;
 namespace Appalachia.WakaTime
 {
     [InitializeOnLoad]
-    internal class WakaTime
+    internal static class WakaTime
     {
-        private static HeartbeatResponse _lastHeartbeat;
+        private static Heartbeat _lastHeartbeat;
+        private static readonly object _sync = new object();
 
         static WakaTime()
         {
@@ -42,6 +46,11 @@ namespace Appalachia.WakaTime
             {
                 Logger.DebugLog("Explicitly disabled, skipping initialization...");
                 return;
+            }
+
+            if (EditorPrefs.HasKey(Configuration.WakatimePathPref))
+            {
+                Configuration.WakatimePath = EditorPrefs.GetString(Configuration.WakatimePathPref);
             }
 
             if (EditorPrefs.HasKey(Configuration.ApiKeyPref))
@@ -89,9 +98,18 @@ namespace Appalachia.WakaTime
             File.WriteAllLines(Configuration.WakatimeProjectFile, content);
         }
 
-        internal static void SendHeartbeat(bool fromSave = false)
+        internal static void SendHeartbeat(bool fromSave = false, [CallerMemberName] string callerMemberName = "")
         {
-            Logger.DebugLog("Sending heartbeat...");
+            Logger.DebugLog($"[{callerMemberName}] Heartbeat generated - checking if it should be sent...");
+
+            lock (_sync)
+            {
+                SendHeartbeatInternal(fromSave, callerMemberName);
+            }
+        }
+        
+        private static void SendHeartbeatInternal(bool fromSave, string callerMemberName)
+        {
 
             var scene = SceneManager.GetActiveScene();
             var scenePath = scene.path;
@@ -105,45 +123,50 @@ namespace Appalachia.WakaTime
 
             if (!processHeartbeat)
             {
-                Logger.DebugLog("Skipping this heartbeat.");
+                Logger.DebugLog($"[{callerMemberName}] Skipping this heartbeat.");
                 return;
             }
 
-            var heartbeatJson = JsonUtility.ToJson(heartbeat);
-
-            var request = UnityWebRequest.Post(Configuration.GetRequestEndpoint(), string.Empty);
-            request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(heartbeatJson));
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            request.SendWebRequest().completed += operation =>
+            
+            var process = new Process();
+            var wakatimePath = Path.Combine(Configuration.WakatimePath, "cli.py");
+            var cliTargetPath = $"\"{wakatimePath}\"";
+            var processStartInfo = new ProcessStartInfo()
             {
-                if (request.downloadHandler.text == string.Empty)
-                {
-                    Logger.LogWarning($"Unable to connect with WakaTime @ [{Configuration.UrlPrefix}].  Disable this plugin.");
-                    return;
-                }
-
-                Logger.DebugLog($"Got response\n{request.downloadHandler.text}");
-
-                var response = JsonUtility.FromJson<Response<HeartbeatResponse>>(request.downloadHandler.text);
-
-                if (response.error != null)
-                {
-                    if (response.error == "Duplicate")
-                    {
-                        Logger.DebugWarn("Duplicate heartbeat");
-                    }
-                    else
-                    {
-                        Logger.LogError($"Failed to send heartbeat to WakaTime!\n{response.error}");
-                    }
-                }
-                else
-                {
-                    Logger.DebugLog("Sent heartbeat!");
-                    _lastHeartbeat = response.data;
-                }
+                CreateNoWindow = true,
+                FileName = "python",
+                Arguments = $" {cliTargetPath} " +
+                            $" --entity \"{heartbeat.entity}\"" +
+                            (heartbeat.isWrite ? " --write" : string.Empty) +
+                            (heartbeat.isDebugging ? " --verbose" : string.Empty) +
+                            $" --entity-type \"{heartbeat.type}\"" +
+                            $" --plugin \"{heartbeat.plugin}\"" +
+                            $" --time \"{heartbeat.time}\"" +
+                            $" --project \"{heartbeat.project}\"",
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
             };
+
+
+            process.StartInfo = processStartInfo;
+
+            process.Start();
+
+            var error = process.StandardError.ReadToEnd();
+            var output = process.StandardOutput.ReadToEnd();
+
+            if (string.Empty == error)
+            {
+                Logger.DebugLog(output);
+                Logger.DebugLog("Sent heartbeat!");
+                _lastHeartbeat = heartbeat;
+            }
+            else
+            {    
+                Logger.Log(processStartInfo.Arguments);
+                Logger.LogError($"Unable to utilize Wakatime CLI: [{error}].  Disable this plugin.");
+            }
         }
 
         [DidReloadScripts]
