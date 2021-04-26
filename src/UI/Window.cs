@@ -39,16 +39,6 @@ namespace Appalachia.WakaTime.UI
             GUI.enabled = true;
 
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.LabelField("Project name", _projectName);
-            if (GUILayout.Button("Change project name"))
-            {
-                ProjectWindow.Display();
-                _needToReload = true;
-            }
-
-            EditorGUILayout.EndHorizontal();
             
             _debug = EditorGUILayout.Toggle("Debug", _debug);
 
@@ -65,7 +55,7 @@ namespace Appalachia.WakaTime.UI
                 _needToReload = _needToReload || GUI.changed;
             }
 
-            if (GUILayout.Button("Save Preferences"))
+            if (GUILayout.Button("Refresh Preferences"))
             {
                 _needToReload = true;
                 CheckReloadStatus();
