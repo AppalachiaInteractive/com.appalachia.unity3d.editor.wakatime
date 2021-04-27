@@ -80,7 +80,7 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-            var basePath = Configuration.WakaTimePathAuto ? Configuration.GetAutoWakaTimePath() : Configuration.WakaTimePath;
+            var basePath = Configuration.WakaTimePath;
             var wakatimePath = Path.Combine(basePath, "src\\wakatime~\\wakatime\\cli.py");
             var cliTargetPath = $"\"{wakatimePath}\"";
 

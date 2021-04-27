@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 
+using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -13,37 +14,50 @@ namespace Appalachia.WakaTime
     {
         internal static string ApiKey = "";
         internal static bool WakaTimePathAuto = true;
-        internal static string WakaTimePath = "";
         internal static bool Enabled = true;
         internal static bool Debugging = true;
         internal static string ProjectName = "";
-
+        
+        [NonSerialized]
+        private static string _wakaTimePath = "";
+        
+        [NonSerialized]
         private static PackageInfo _package;
 
-        internal static PackageInfo GetWakaTimePackage()
+        internal static string WakaTimePath
         {
-            if (_package == null)
+            get
             {
-                _package = AssetDatabase.FindAssets("package")
-                                       ?.Select(AssetDatabase.GUIDToAssetPath)
-                                        .Where(x => AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
-                                        .Select(PackageInfo.FindForAssetPath)
-                                        .FirstOrDefault(p => (p != null) && (p.name == "com.appalachia.unity3d.editor.wakatime"));
+                if (WakaTimePathAuto)
+                {
+                    if (_package == null)
+                    {
+                        _package = AssetDatabase.FindAssets("package")
+                                               ?.Select(AssetDatabase.GUIDToAssetPath)
+                                                .Where(x => AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
+                                                .Select(PackageInfo.FindForAssetPath)
+                                                .FirstOrDefault(p => (p != null) && (p.name == "com.appalachia.unity3d.editor.wakatime"));
+
+
+                        if (_package == null)
+                        {
+                            return "Assets\\wakatime\\";
+                        }
+                    }
+                
+                    return $"{_package.resolvedPath}";
+                }
+                
+
+                return _wakaTimePath;
             }
-
-            return _package;
-        }
-
-        internal static string GetAutoWakaTimePath()
-        {
-            var package = GetWakaTimePackage();
-            if (package != null)
+            set
             {
-                return $"{package.resolvedPath}";
+                _wakaTimePath = value;
+                EditorPrefs.SetString(Constants.ConfigurationKeys.WakaTimePath, _wakaTimePath);
             }
-
-            return WakaTimePath ?? "Assets\\wakatime\\";
         }
+        
 
         internal static void SavePreferences()
         {
@@ -64,10 +78,6 @@ namespace Appalachia.WakaTime
             if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePath))
             {
                 WakaTimePath = EditorPrefs.GetString(Constants.ConfigurationKeys.WakaTimePath);
-                if (string.IsNullOrWhiteSpace(WakaTimePath))
-                {
-                    WakaTimePath = GetAutoWakaTimePath();
-                }
             }
 
             if (EditorPrefs.HasKey(Constants.ConfigurationKeys.ApiKey))
