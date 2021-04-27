@@ -4,6 +4,7 @@ using System;
 
 namespace Appalachia.WakaTime
 {
+    [Serializable]
     internal struct Heartbeat
     {
         private static readonly DateTime _epoch = new DateTime(1970, 1, 1);
@@ -23,7 +24,7 @@ namespace Appalachia.WakaTime
             entity = file == string.Empty ? "Unsaved Scene" : file;
             type = "file";
             time = (float) DateTime.UtcNow.Subtract(_epoch).TotalSeconds;
-            project = WakaTime.ProjectName;
+            project = Configuration.ProjectName;
             plugin = "unity-wakatime";
             branch = "main";
             language = "unity";

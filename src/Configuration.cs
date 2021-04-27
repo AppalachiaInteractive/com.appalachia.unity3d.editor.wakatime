@@ -1,28 +1,22 @@
 #if UNITY_EDITOR
 
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
+
 namespace Appalachia.WakaTime
 {
     internal static class Configuration
     {
-        internal const string LogPrefix = "[WakaTime]";
-        internal const string PrefPrefix = "WakaTime/";
-        internal const string WakaTimePathAutoPref = PrefPrefix + "WakaTimePathAuto";
-        internal const string WakaTimePathPref = PrefPrefix + "WakaTimePath";
-        internal const string ApiKeyPref = PrefPrefix + "APIKey";
-        internal const string EnabledPref = PrefPrefix + "Enabled";
-        internal const string DebugPref = PrefPrefix + "Debug";
-        internal const string WakaTimeProjectFile = ".wakatime-project";
-        internal const int HeartbeatCooldown = 120;
         internal static string ApiKey = "";
         internal static bool WakaTimePathAuto = true;
-        internal static string WakaTimePath = GetAutoWakaTimePath();
+        internal static string WakaTimePath = "";
         internal static bool Enabled = true;
         internal static bool Debugging = true;
+        internal static string ProjectName = "";
 
         private static PackageInfo _package;
 
@@ -51,13 +45,51 @@ namespace Appalachia.WakaTime
             return WakaTimePath ?? "Assets\\wakatime\\";
         }
 
-        /*
-         internal const string UrlPrefix = "https://api.wakatime.com/api/v1/";
-        internal static string GetRequestEndpoint()
+        internal static void SavePreferences()
         {
-            return $"{Configuration.UrlPrefix}users/current/heartbeats?api_key={Configuration.ApiKey}";
+            EditorPrefs.SetString(Constants.ConfigurationKeys.ApiKey, ApiKey);
+            EditorPrefs.SetBool(Constants.ConfigurationKeys.WakaTimePathAuto, WakaTimePathAuto);
+            EditorPrefs.SetString(Constants.ConfigurationKeys.WakaTimePath, WakaTimePath);
+            EditorPrefs.SetBool(Constants.ConfigurationKeys.Enabled, Enabled);
+            EditorPrefs.SetBool(Constants.ConfigurationKeys.Debugging, Debugging);
         }
-        */
+        
+        internal static void RefreshPreferences()
+        {
+            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePathAuto))
+            {
+                WakaTimePathAuto = EditorPrefs.GetBool(Constants.ConfigurationKeys.WakaTimePathAuto);
+            }
+
+            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePath))
+            {
+                WakaTimePath = EditorPrefs.GetString(Constants.ConfigurationKeys.WakaTimePath);
+                if (string.IsNullOrWhiteSpace(WakaTimePath))
+                {
+                    WakaTimePath = GetAutoWakaTimePath();
+                }
+            }
+
+            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.ApiKey))
+            {
+                ApiKey = EditorPrefs.GetString(Constants.ConfigurationKeys.ApiKey);
+            }
+
+            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.Enabled))
+            {
+                Enabled = EditorPrefs.GetBool(Constants.ConfigurationKeys.Enabled);
+            }
+
+            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.Debugging))
+            {
+                Debugging = EditorPrefs.GetBool(Constants.ConfigurationKeys.Debugging);
+            }
+            
+            ProjectName = File.Exists(Constants.Project.WakaTimeProjectFile)
+                ? File.ReadAllLines(Constants.Project.WakaTimeProjectFile)[0]
+                : Application.productName;
+        }
+
     }
 }
 #endif

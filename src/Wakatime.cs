@@ -25,39 +25,16 @@ namespace Appalachia.WakaTime
             Initialize();
         }
 
-        public static string ProjectName { get; private set; }
 
         public static void Initialize()
         {
-            if (EditorPrefs.HasKey(Configuration.EnabledPref))
-            {
-                Configuration.Enabled = EditorPrefs.GetBool(Configuration.EnabledPref);
-            }
-
-            if (EditorPrefs.HasKey(Configuration.DebugPref))
-            {
-                Configuration.Debugging = EditorPrefs.GetBool(Configuration.DebugPref);
-            }
+            Logger.Log("Initializing...");
+            Configuration.RefreshPreferences();
 
             if (!Configuration.Enabled)
             {
                 Logger.DebugLog("Explicitly disabled, skipping initialization...");
                 return;
-            }
-
-            if (EditorPrefs.HasKey(Configuration.WakaTimePathAutoPref))
-            {
-                Configuration.WakaTimePathAuto = EditorPrefs.GetBool(Configuration.WakaTimePathAutoPref);
-            }
-
-            if (EditorPrefs.HasKey(Configuration.WakaTimePathPref))
-            {
-                Configuration.WakaTimePath = EditorPrefs.GetString(Configuration.WakaTimePathPref);
-            }
-
-            if (EditorPrefs.HasKey(Configuration.ApiKeyPref))
-            {
-                Configuration.ApiKey = EditorPrefs.GetString(Configuration.ApiKeyPref);
             }
 
             if (Configuration.ApiKey == string.Empty)
@@ -66,41 +43,13 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-            ProjectName = GetProjectName();
-
-            Logger.DebugLog("Initializing...");
+            Logger.Log("Initialized.  Sending first heartbeat...");
 
             EditorApplication.delayCall += () =>
             {
                 SendHeartbeat();
                 Events.LinkCallbacks();
             };
-        }
-
-        /// <summary>
-        ///     Reads .wakatime-project file
-        ///     <seealso cref="https://wakatime.com/faq#rename-projects" />
-        /// </summary>
-        /// <returns>Lines of .wakatime-project or null if file not found</returns>
-        public static string[] GetProjectFile()
-        {
-            return !File.Exists(Configuration.WakaTimeProjectFile) ? null : File.ReadAllLines(Configuration.WakaTimeProjectFile);
-        }
-
-        /// <summary>
-        ///     Rewrites o creates new .wakatime-project file with given lines
-        ///     <seealso cref="https://wakatime.com/faq#rename-projects" />
-        /// </summary>
-        /// <example>
-        ///     <code>
-        /// project-override-name
-        /// branch-override-name
-        /// </code>
-        /// </example>
-        /// <param name="content"></param>
-        public static void SetProjectFile(string[] content)
-        {
-            File.WriteAllLines(Configuration.WakaTimeProjectFile, content);
         }
 
         internal static void SendHeartbeat(bool fromSave = false, [CallerMemberName] string callerMemberName = "")
@@ -123,7 +72,7 @@ namespace Appalachia.WakaTime
             var timeSinceLastHeartbeat = heartbeat.time - _lastHeartbeat.time;
 
             var processHeartbeat =
-                fromSave || (timeSinceLastHeartbeat > Configuration.HeartbeatCooldown) || (heartbeat.entity != _lastHeartbeat.entity);
+                fromSave || (timeSinceLastHeartbeat > Constants.WakaTime.HeartbeatCooldown) || (heartbeat.entity != _lastHeartbeat.entity);
 
             if (!processHeartbeat)
             {
@@ -145,6 +94,7 @@ namespace Appalachia.WakaTime
                             (heartbeat.isWrite ? " --write" : string.Empty) +
                             (heartbeat.isDebugging ? " --verbose" : string.Empty) +
                             $" --entity-type \"{heartbeat.type}\"" +
+                            $" --language \"{heartbeat.language}\"" +
                             $" --plugin \"{heartbeat.plugin}\"" +
                             $" --time \"{heartbeat.time}\"" +
                             $" --project \"{heartbeat.project}\"",
@@ -176,17 +126,11 @@ namespace Appalachia.WakaTime
         [DidReloadScripts]
         private static void OnScriptReload()
         {
+            Logger.Log("Reloading scripts..");
             Initialize();
+            Logger.Log("Reload completed!");
         }
 
-        /// <summary>
-        ///     Project name for sending <see cref="Heartbeat" />
-        /// </summary>
-        /// <returns><see cref="Application.productName" /> or first line of .wakatime-project</returns>
-        private static string GetProjectName()
-        {
-            return File.Exists(Configuration.WakaTimeProjectFile) ? File.ReadAllLines(Configuration.WakaTimeProjectFile)[0] : Application.productName;
-        }
     }
 }
 

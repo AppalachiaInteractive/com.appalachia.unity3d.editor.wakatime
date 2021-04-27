@@ -8,7 +8,7 @@ namespace Appalachia.WakaTime
     {
         internal static string GetLogPrefix()
         {
-            return $"{Configuration.LogPrefix} ";
+            return $"{Constants.Logger.LogPrefix} ";
         }
 
         internal static void Log(string message)
