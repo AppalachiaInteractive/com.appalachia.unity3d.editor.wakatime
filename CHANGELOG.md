@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 9a9671a | 2021-04-27 | Chris Schubert | Fixing dist metafile inclusion |
+
+
+ ## Tag: v0.3.7
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | 191f747 | 2021-04-27 | Chris Schubert | Refactor configuration, fix initialization issues, and update UI |
 
 
