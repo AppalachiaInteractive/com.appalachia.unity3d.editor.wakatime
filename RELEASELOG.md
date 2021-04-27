@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.6
+# 0.3.7
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 191f747 | 2021-04-27 | Chris Schubert | Refactor configuration, fix initialization issues, and update UI |
 | e3c7e2c | 2021-04-26 | Chris Schubert | Fixing UI issues |
 | 09bd435 | 2021-04-26 | Chris Schubert | Fixing API Key retrieval |
 | e7f7a44 | 2021-04-26 | Chris Schubert | Disable UI when auto-path, fix of path resolution |

@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 191f747 | 2021-04-27 | Chris Schubert | Refactor configuration, fix initialization issues, and update UI |
+
+
+ ## Tag: v0.3.6
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | e3c7e2c | 2021-04-26 | Chris Schubert | Fixing UI issues |
 
 
