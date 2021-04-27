@@ -1,10 +1,17 @@
 .dist
+.dist.meta
 .env
+.env.meta
 .private
+.private.meta
 .test
+.test.meta
 .venv
+.venv.meta
 */.private/*
+*/.private.meta
 dist
+dist.meta
 
 
 # ====== #
