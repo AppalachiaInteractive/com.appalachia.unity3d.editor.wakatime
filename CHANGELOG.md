@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 1770063 | 2021-04-27 | Chris Schubert | Updating .gitignore for dist folder |
+
+
+ ## Tag: v0.3.8
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | 9a9671a | 2021-04-27 | Chris Schubert | Fixing dist metafile inclusion |
 
 

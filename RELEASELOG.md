@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.8
+# 0.3.9
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 1770063 | 2021-04-27 | Chris Schubert | Updating .gitignore for dist folder |
 | 9a9671a | 2021-04-27 | Chris Schubert | Fixing dist metafile inclusion |
 | 191f747 | 2021-04-27 | Chris Schubert | Refactor configuration, fix initialization issues, and update UI |
 | e3c7e2c | 2021-04-26 | Chris Schubert | Fixing UI issues |
