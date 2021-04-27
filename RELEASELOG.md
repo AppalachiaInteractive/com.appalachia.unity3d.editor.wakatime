@@ -9,9 +9,10 @@
 ```
 
 
-# 0.3.9
+# 0.3.10
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| e162739 | 2021-04-27 | Chris Schubert | Fixing package cache issue |
 | 1770063 | 2021-04-27 | Chris Schubert | Updating .gitignore for dist folder |
 | 9a9671a | 2021-04-27 | Chris Schubert | Fixing dist metafile inclusion |
 | 191f747 | 2021-04-27 | Chris Schubert | Refactor configuration, fix initialization issues, and update UI |

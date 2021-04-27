@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| e162739 | 2021-04-27 | Chris Schubert | Fixing package cache issue |
+
+
+ ## Tag: v0.3.9
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | 1770063 | 2021-04-27 | Chris Schubert | Updating .gitignore for dist folder |
 
 
