@@ -6,23 +6,21 @@ namespace Appalachia.WakaTime
         {
             internal const string EnableWakaTime = "Enable WakaTime";
             internal const string APIKey = "API Key";
-            internal const string RefreshPreferences = "Refresh Preferences";
-            internal const string SavePreferences = "Save Preferences";
+            internal const string RefreshPreferences = "Refresh";
+            internal const string SavePreferences = "Save";
             internal const string WakaTimeAutoPath = "Use Embedded WakaTime CLI";
             internal const string WakaTimePath = "WakaTime CLI Path";
             internal const string Debugging = "Debug WakaTime";
             internal const string OpenDashboard = "Open Dashboard";
             internal const string ShowAPIKey = "Show";
             internal const string HideAPIKey = "Hide";
-
         }
-        
+
         internal static class Window
         {
             internal const string MenuPath = "Window/WakaTime";
             internal const string Title = "WakaTime";
             internal const string DashboardUrl = "https://wakatime.com/dashboard/";
-
         }
 
         internal static class Logger
@@ -49,7 +47,5 @@ namespace Appalachia.WakaTime
         {
             internal const int HeartbeatCooldown = 120;
         }
-        
-
     }
 }

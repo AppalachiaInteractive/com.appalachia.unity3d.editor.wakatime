@@ -14,7 +14,9 @@
   |_____| [___][___||__||__]'.__.'
 
 ```
-## com.appalachia.unity3d.editor.wakatime
-### Created by Appalachia Interactive
+`com.appalachia.unity3d.editor.wakatime`
+#### Created by Appalachia Interactive
 
-Wakatime Tracker for Appalachia Interactive
+Wakatime Tracker for Unity3D projects.
+
+![image](./media/screenshot.png)

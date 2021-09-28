@@ -25,10 +25,9 @@ namespace Appalachia.WakaTime
             Initialize();
         }
 
-
         public static void Initialize()
         {
-            Logger.Log("Initializing...");
+            Logger.DebugLog("Initializing...");
             Configuration.RefreshPreferences();
 
             if (!Configuration.Enabled)
@@ -43,7 +42,7 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-            Logger.Log("Initialized.  Sending first heartbeat...");
+            Logger.DebugLog("Initialized.  Sending first heartbeat...");
 
             EditorApplication.delayCall += () =>
             {
@@ -66,13 +65,16 @@ namespace Appalachia.WakaTime
         {
             var scene = SceneManager.GetActiveScene();
             var scenePath = scene.path;
-            var sceneFilePath = scenePath != string.Empty ? Application.dataPath + "/" + scenePath.Substring("Assets/".Length) : string.Empty;
+            var sceneFilePath = scenePath != string.Empty
+                ? Application.dataPath + "/" + scenePath.Substring("Assets/".Length)
+                : string.Empty;
 
             var heartbeat = new Heartbeat(sceneFilePath, fromSave);
             var timeSinceLastHeartbeat = heartbeat.time - _lastHeartbeat.time;
 
-            var processHeartbeat =
-                fromSave || (timeSinceLastHeartbeat > Constants.WakaTime.HeartbeatCooldown) || (heartbeat.entity != _lastHeartbeat.entity);
+            var processHeartbeat = fromSave ||
+                                   (timeSinceLastHeartbeat > Constants.WakaTime.HeartbeatCooldown) ||
+                                   (heartbeat.entity != _lastHeartbeat.entity);
 
             if (!processHeartbeat)
             {
@@ -126,11 +128,10 @@ namespace Appalachia.WakaTime
         [DidReloadScripts]
         private static void OnScriptReload()
         {
-            Logger.Log("Reloading scripts..");
+            Logger.DebugLog("Reloading scripts..");
             Initialize();
-            Logger.Log("Reload completed!");
+            Logger.DebugLog("Reload completed!");
         }
-
     }
 }
 

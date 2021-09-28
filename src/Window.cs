@@ -7,7 +7,7 @@ namespace Appalachia.WakaTime
     public class Window : EditorWindow
     {
         private bool _needToReload;
-        private bool _showApiKey = false;
+        private bool _showApiKey;
 
         [MenuItem(Constants.Window.MenuPath)]
         private static void Init()
@@ -20,37 +20,41 @@ namespace Appalachia.WakaTime
         private void OnGUI()
         {
             _needToReload = false;
-            
 
             Configuration.Enabled = EditorGUILayout.Toggle(Constants.Language.EnableWakaTime, Configuration.Enabled);
 
             EditorGUILayout.BeginHorizontal();
             if (_showApiKey)
             {
-                Configuration.ApiKey = EditorGUILayout.TextField(Constants.Language.APIKey, Configuration.ApiKey);                
+                Configuration.ApiKey = EditorGUILayout.TextField(Constants.Language.APIKey, Configuration.ApiKey);
             }
             else
             {
                 Configuration.ApiKey = EditorGUILayout.PasswordField(Constants.Language.APIKey, Configuration.ApiKey);
             }
 
+            EditorGUILayout.Space(3f, false);
             if (GUILayout.Button(_showApiKey ? Constants.Language.HideAPIKey : Constants.Language.ShowAPIKey))
             {
                 _showApiKey = !_showApiKey;
             }
-            
+
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
-            Configuration.WakaTimePathAuto = EditorGUILayout.ToggleLeft(Constants.Language.WakaTimeAutoPath, Configuration.WakaTimePathAuto);
+            Configuration.WakaTimePathAuto = EditorGUILayout.ToggleLeft(
+                Constants.Language.WakaTimeAutoPath,
+                Configuration.WakaTimePathAuto
+            );
 
             GUI.enabled = !Configuration.WakaTimePathAuto;
-            Configuration.WakaTimePath = EditorGUILayout.TextField(Constants.Language.WakaTimePath, Configuration.WakaTimePath);
+            Configuration.WakaTimePath = EditorGUILayout.TextField(
+                Constants.Language.WakaTimePath,
+                Configuration.WakaTimePath
+            );
             GUI.enabled = true;
 
-            EditorGUILayout.EndHorizontal();
-            
-            Configuration.Debugging = EditorGUILayout.Toggle(Constants.Language.Debugging, Configuration.Debugging);
+
+            Configuration.Debugging = EditorGUILayout.ToggleLeft(Constants.Language.Debugging, Configuration.Debugging);
 
             EditorGUILayout.BeginHorizontal();
 
@@ -67,12 +71,13 @@ namespace Appalachia.WakaTime
                 CheckReloadStatus();
             }
 
+            EditorGUILayout.EndHorizontal();
+            
             if (GUILayout.Button(Constants.Language.OpenDashboard))
             {
                 Application.OpenURL(Constants.Window.DashboardUrl);
             }
 
-            EditorGUILayout.EndHorizontal();
 
             CheckReloadStatus();
         }
@@ -91,8 +96,6 @@ namespace Appalachia.WakaTime
                 _needToReload = false;
             }
         }
-
-        
     }
 }
 
