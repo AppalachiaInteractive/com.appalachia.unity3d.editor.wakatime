@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace Appalachia.WakaTime
+namespace Appalachia.Editor.WakaTime
 {
     internal class Logger
     {

@@ -3,7 +3,6 @@
 #region
 
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -12,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 #endregion
 
-namespace Appalachia.WakaTime
+namespace Appalachia.Editor.WakaTime
 {
     [InitializeOnLoad]
     internal static class WakaTime
@@ -27,8 +26,8 @@ namespace Appalachia.WakaTime
 
         public static void Initialize()
         {
-            Logger.DebugLog("Initializing...");
             Configuration.RefreshPreferences();
+            Logger.DebugLog("Initializing...");
 
             if (!Configuration.Enabled)
             {
@@ -82,8 +81,7 @@ namespace Appalachia.WakaTime
                 return;
             }
 
-            var basePath = Configuration.WakaTimePath;
-            var wakatimePath = Path.Combine(basePath, "src\\wakatime~\\wakatime\\cli.py");
+            var wakatimePath = Configuration.WakaTimePath;
             var cliTargetPath = $"\"{wakatimePath}\"";
 
             var process = new Process();
@@ -120,6 +118,7 @@ namespace Appalachia.WakaTime
             }
             else
             {
+                Configuration.WakaTimePath = null;
                 Logger.Log(processStartInfo.Arguments);
                 Logger.LogError($"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin.");
             }
@@ -132,6 +131,7 @@ namespace Appalachia.WakaTime
             Initialize();
             Logger.DebugLog("Reload completed!");
         }
+        
     }
 }
 

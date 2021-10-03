@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
-namespace Appalachia.WakaTime
+namespace Appalachia.Editor.WakaTime
 {
     internal static class Configuration
     {
@@ -27,38 +27,19 @@ namespace Appalachia.WakaTime
             {
                 if (WakaTimePathAuto)
                 {
-                    if (_package == null)
+                    if (string.IsNullOrWhiteSpace(_wakaTimePath))
                     {
-                        _package = AssetDatabase.FindAssets("package")
-                                               ?.Select(AssetDatabase.GUIDToAssetPath)
-                                                .Where(x => AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
-                                                .Select(PackageInfo.FindForAssetPath)
-                                                .FirstOrDefault(
-                                                     p => (p != null) &&
-                                                          (p.name == "com.appalachia.unity3d.editor.wakatime")
-                                                 );
+                        var basePath = Application.dataPath;
+                        var parentBasePath = new DirectoryInfo(basePath).Parent;
+                        
+                        var files = Directory.EnumerateFileSystemEntries(
+                            parentBasePath.FullName,
+                            "cli.py",
+                            SearchOption.AllDirectories
+                        );
 
+                        _wakaTimePath = files.First();
                     }
-
-                    if (_package != null)
-                    {
-                        return $"{_package.resolvedPath}";
-                    }
-
-
-                    var files = Directory.EnumerateFileSystemEntries(
-                        Application.dataPath,
-                        "cli.py",
-                        SearchOption.AllDirectories
-                    );
-
-                    foreach (var file in files)
-                    {
-                        _wakaTimePath = Path.GetDirectoryName(file);
-                        return _wakaTimePath;
-                    }
-                    
-                    return "Assets\\wakatime\\";
                 }
 
                 return _wakaTimePath;
