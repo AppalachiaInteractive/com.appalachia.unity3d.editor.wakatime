@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| c3253a0228eb60b8d2c3e278de5a8e8e31706f9b | 2021-10-04 | Chris Schubert | Code cleanup and refactoring |
+
+
+ ## Tag: `v0.3.12`
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | e32fa99a70ba5d402985a517d46d6f06d57ca13f | 2021-10-03 | Chris Schubert | Organizing Appalachia packages for package management |
 
 
