@@ -17,7 +17,7 @@ namespace Appalachia.Editor.WakaTime
     internal static class WakaTime
     {
         private static Heartbeat _lastHeartbeat;
-        private static readonly object _sync = new object();
+        private static readonly object _sync = new();
 
         static WakaTime()
         {
@@ -50,9 +50,13 @@ namespace Appalachia.Editor.WakaTime
             };
         }
 
-        internal static void SendHeartbeat(bool fromSave = false, [CallerMemberName] string callerMemberName = "")
+        internal static void SendHeartbeat(
+            bool fromSave = false,
+            [CallerMemberName] string callerMemberName = "")
         {
-            Logger.DebugLog($"[{callerMemberName}] Heartbeat generated - checking if it should be sent...");
+            Logger.DebugLog(
+                $"[{callerMemberName}] Heartbeat generated - checking if it should be sent..."
+            );
 
             lock (_sync)
             {
@@ -72,7 +76,8 @@ namespace Appalachia.Editor.WakaTime
             var timeSinceLastHeartbeat = heartbeat.time - _lastHeartbeat.time;
 
             var processHeartbeat = fromSave ||
-                                   (timeSinceLastHeartbeat > Constants.WakaTime.HeartbeatCooldown) ||
+                                   (timeSinceLastHeartbeat >
+                                    Constants.WakaTime.HeartbeatCooldown) ||
                                    (heartbeat.entity != _lastHeartbeat.entity);
 
             if (!processHeartbeat)
@@ -120,7 +125,9 @@ namespace Appalachia.Editor.WakaTime
             {
                 Configuration.WakaTimePath = null;
                 Logger.Log(processStartInfo.Arguments);
-                Logger.LogError($"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin.");
+                Logger.LogError(
+                    $"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin."
+                );
             }
         }
 
@@ -131,7 +138,6 @@ namespace Appalachia.Editor.WakaTime
             Initialize();
             Logger.DebugLog("Reload completed!");
         }
-        
     }
 }
 

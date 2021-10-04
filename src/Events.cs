@@ -58,7 +58,10 @@ namespace Appalachia.Editor.WakaTime
             WakaTime.SendHeartbeat(true);
         }
 
-        private static void EditorSceneManagerOnnewSceneCreated(Scene scene, NewSceneSetup setup, NewSceneMode mode)
+        private static void EditorSceneManagerOnnewSceneCreated(
+            Scene scene,
+            NewSceneSetup setup,
+            NewSceneMode mode)
         {
             WakaTime.SendHeartbeat();
         }

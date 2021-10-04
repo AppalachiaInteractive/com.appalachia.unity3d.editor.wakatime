@@ -7,7 +7,7 @@ namespace Appalachia.Editor.WakaTime
     [Serializable]
     internal struct Heartbeat
     {
-        private static readonly DateTime _epoch = new DateTime(1970, 1, 1);
+        private static readonly DateTime _epoch = new(1970, 1, 1);
 
         public string entity;
         public string type;

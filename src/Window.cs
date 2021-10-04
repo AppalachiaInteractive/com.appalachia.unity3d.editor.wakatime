@@ -9,32 +9,35 @@ namespace Appalachia.Editor.WakaTime
         private bool _needToReload;
         private bool _showApiKey;
 
-        [MenuItem(Constants.Window.MenuPath)]
-        private static void Init()
-        {
-            Configuration.RefreshPreferences();
-            var window = (Window) GetWindow(typeof(Window), false, Constants.Window.Title);
-            window.Show();
-        }
-
         private void OnGUI()
         {
             _needToReload = false;
 
-            Configuration.Enabled = EditorGUILayout.Toggle(Constants.Language.EnableWakaTime, Configuration.Enabled);
+            Configuration.Enabled = EditorGUILayout.Toggle(
+                Constants.Language.EnableWakaTime,
+                Configuration.Enabled
+            );
 
             EditorGUILayout.BeginHorizontal();
             if (_showApiKey)
             {
-                Configuration.ApiKey = EditorGUILayout.TextField(Constants.Language.APIKey, Configuration.ApiKey);
+                Configuration.ApiKey = EditorGUILayout.TextField(
+                    Constants.Language.APIKey,
+                    Configuration.ApiKey
+                );
             }
             else
             {
-                Configuration.ApiKey = EditorGUILayout.PasswordField(Constants.Language.APIKey, Configuration.ApiKey);
+                Configuration.ApiKey = EditorGUILayout.PasswordField(
+                    Constants.Language.APIKey,
+                    Configuration.ApiKey
+                );
             }
 
             EditorGUILayout.Space(3f, false);
-            if (GUILayout.Button(_showApiKey ? Constants.Language.HideAPIKey : Constants.Language.ShowAPIKey))
+            if (GUILayout.Button(
+                _showApiKey ? Constants.Language.HideAPIKey : Constants.Language.ShowAPIKey
+            ))
             {
                 _showApiKey = !_showApiKey;
             }
@@ -53,8 +56,10 @@ namespace Appalachia.Editor.WakaTime
             );
             GUI.enabled = true;
 
-
-            Configuration.Debugging = EditorGUILayout.ToggleLeft(Constants.Language.Debugging, Configuration.Debugging);
+            Configuration.Debugging = EditorGUILayout.ToggleLeft(
+                Constants.Language.Debugging,
+                Configuration.Debugging
+            );
 
             EditorGUILayout.BeginHorizontal();
 
@@ -72,12 +77,11 @@ namespace Appalachia.Editor.WakaTime
             }
 
             EditorGUILayout.EndHorizontal();
-            
+
             if (GUILayout.Button(Constants.Language.OpenDashboard))
             {
                 Application.OpenURL(Constants.Window.DashboardUrl);
             }
-
 
             CheckReloadStatus();
         }
@@ -85,6 +89,14 @@ namespace Appalachia.Editor.WakaTime
         private void OnFocus()
         {
             CheckReloadStatus();
+        }
+
+        [MenuItem(Constants.Window.MenuPath)]
+        private static void Init()
+        {
+            Configuration.RefreshPreferences();
+            var window = (Window) GetWindow(typeof(Window), false, Constants.Window.Title);
+            window.Show();
         }
 
         private void CheckReloadStatus()

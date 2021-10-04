@@ -31,7 +31,7 @@ namespace Appalachia.Editor.WakaTime
                     {
                         var basePath = Application.dataPath;
                         var parentBasePath = new DirectoryInfo(basePath).Parent;
-                        
+
                         var files = Directory.EnumerateFileSystemEntries(
                             parentBasePath.FullName,
                             "cli.py",
@@ -64,7 +64,8 @@ namespace Appalachia.Editor.WakaTime
         {
             if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePathAuto))
             {
-                WakaTimePathAuto = EditorPrefs.GetBool(Constants.ConfigurationKeys.WakaTimePathAuto);
+                WakaTimePathAuto =
+                    EditorPrefs.GetBool(Constants.ConfigurationKeys.WakaTimePathAuto);
             }
 
             if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePath))
