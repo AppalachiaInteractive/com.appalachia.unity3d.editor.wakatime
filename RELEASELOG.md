@@ -10,7 +10,7 @@
 
 ## Released Changes
 
-`0.3.11`
+`0.3.12`
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
-| d2b7c85ae921065da2d9e844785883beaba4bd1f | 2021-09-28 | Chris Schubert | Packaging and CI update |
+
