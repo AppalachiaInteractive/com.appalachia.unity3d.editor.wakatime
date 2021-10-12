@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Unity.Profiling;
 using UnityEditor;
 using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
@@ -11,6 +12,8 @@ namespace Appalachia.Editor.WakaTime
 {
     internal static class Configuration
     {
+        private const string _PRF_PFX = nameof(Configuration) + ".";
+        
         internal static string ApiKey = "";
         internal static bool WakaTimePathAuto = true;
         internal static bool Enabled = true;
@@ -21,28 +24,32 @@ namespace Appalachia.Editor.WakaTime
 
         [NonSerialized] private static PackageInfo _package;
 
+        private static readonly ProfilerMarker _PRF_WakaTimePath = new ProfilerMarker(_PRF_PFX + nameof(WakaTimePath));
         internal static string WakaTimePath
         {
             get
             {
-                if (WakaTimePathAuto)
+                using (_PRF_WakaTimePath.Auto())
                 {
-                    if (string.IsNullOrWhiteSpace(_wakaTimePath))
+                    if (WakaTimePathAuto)
                     {
-                        var basePath = Application.dataPath;
-                        var parentBasePath = new DirectoryInfo(basePath).Parent;
+                        if (string.IsNullOrWhiteSpace(_wakaTimePath))
+                        {
+                            var basePath = Application.dataPath;
+                            var parentBasePath = new DirectoryInfo(basePath).Parent;
 
-                        var files = Directory.EnumerateFileSystemEntries(
-                            parentBasePath.FullName,
-                            "cli.py",
-                            SearchOption.AllDirectories
-                        );
+                            var files = Directory.EnumerateFileSystemEntries(
+                                parentBasePath.FullName,
+                                "cli.py",
+                                SearchOption.AllDirectories
+                            );
 
-                        _wakaTimePath = files.First();
+                            _wakaTimePath = files.First();
+                        }
                     }
-                }
 
-                return _wakaTimePath;
+                    return _wakaTimePath;
+                }
             }
             set
             {
@@ -51,46 +58,54 @@ namespace Appalachia.Editor.WakaTime
             }
         }
 
+        private static readonly ProfilerMarker _PRF_SavePreferences = new ProfilerMarker(_PRF_PFX + nameof(SavePreferences));
         internal static void SavePreferences()
         {
-            EditorPrefs.SetString(Constants.ConfigurationKeys.ApiKey, ApiKey);
-            EditorPrefs.SetBool(Constants.ConfigurationKeys.WakaTimePathAuto, WakaTimePathAuto);
-            EditorPrefs.SetString(Constants.ConfigurationKeys.WakaTimePath, WakaTimePath);
-            EditorPrefs.SetBool(Constants.ConfigurationKeys.Enabled,   Enabled);
-            EditorPrefs.SetBool(Constants.ConfigurationKeys.Debugging, Debugging);
+            using (_PRF_SavePreferences.Auto())
+            {
+                EditorPrefs.SetString(Constants.ConfigurationKeys.ApiKey, ApiKey);
+                EditorPrefs.SetBool(Constants.ConfigurationKeys.WakaTimePathAuto, WakaTimePathAuto);
+                EditorPrefs.SetString(Constants.ConfigurationKeys.WakaTimePath, WakaTimePath);
+                EditorPrefs.SetBool(Constants.ConfigurationKeys.Enabled,   Enabled);
+                EditorPrefs.SetBool(Constants.ConfigurationKeys.Debugging, Debugging);
+            }
         }
 
+        private static readonly ProfilerMarker _PRF_RefreshPreferences = new ProfilerMarker(_PRF_PFX + nameof(RefreshPreferences));
         internal static void RefreshPreferences()
         {
-            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePathAuto))
+            using (_PRF_RefreshPreferences.Auto())
             {
-                WakaTimePathAuto =
-                    EditorPrefs.GetBool(Constants.ConfigurationKeys.WakaTimePathAuto);
-            }
+                if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePathAuto))
+                {
+                    WakaTimePathAuto =
+                        EditorPrefs.GetBool(Constants.ConfigurationKeys.WakaTimePathAuto);
+                }
 
-            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePath))
-            {
-                WakaTimePath = EditorPrefs.GetString(Constants.ConfigurationKeys.WakaTimePath);
-            }
+                if (EditorPrefs.HasKey(Constants.ConfigurationKeys.WakaTimePath))
+                {
+                    WakaTimePath = EditorPrefs.GetString(Constants.ConfigurationKeys.WakaTimePath);
+                }
 
-            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.ApiKey))
-            {
-                ApiKey = EditorPrefs.GetString(Constants.ConfigurationKeys.ApiKey);
-            }
+                if (EditorPrefs.HasKey(Constants.ConfigurationKeys.ApiKey))
+                {
+                    ApiKey = EditorPrefs.GetString(Constants.ConfigurationKeys.ApiKey);
+                }
 
-            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.Enabled))
-            {
-                Enabled = EditorPrefs.GetBool(Constants.ConfigurationKeys.Enabled);
-            }
+                if (EditorPrefs.HasKey(Constants.ConfigurationKeys.Enabled))
+                {
+                    Enabled = EditorPrefs.GetBool(Constants.ConfigurationKeys.Enabled);
+                }
 
-            if (EditorPrefs.HasKey(Constants.ConfigurationKeys.Debugging))
-            {
-                Debugging = EditorPrefs.GetBool(Constants.ConfigurationKeys.Debugging);
-            }
+                if (EditorPrefs.HasKey(Constants.ConfigurationKeys.Debugging))
+                {
+                    Debugging = EditorPrefs.GetBool(Constants.ConfigurationKeys.Debugging);
+                }
 
-            ProjectName = File.Exists(Constants.Project.WakaTimeProjectFile)
-                ? File.ReadAllLines(Constants.Project.WakaTimeProjectFile)[0]
-                : Application.productName;
+                ProjectName = File.Exists(Constants.Project.WakaTimeProjectFile)
+                    ? File.ReadAllLines(Constants.Project.WakaTimeProjectFile)[0]
+                    : Application.productName;
+            }
         }
     }
 }

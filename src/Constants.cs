@@ -18,7 +18,7 @@ namespace Appalachia.Editor.WakaTime
 
         internal static class Window
         {
-            internal const string MenuPath = "Window/WakaTime";
+            internal const string MenuPath = "Appalachia/Windows/WakaTime";
             internal const string Title = "WakaTime";
             internal const string DashboardUrl = "https://wakatime.com/dashboard/";
         }
