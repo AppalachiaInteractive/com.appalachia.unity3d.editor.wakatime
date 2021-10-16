@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Appalachia.Editor.WakaTime
+namespace Appalachia.Utility.Editor.WakaTime
 {
     [Serializable]
     internal struct Heartbeat

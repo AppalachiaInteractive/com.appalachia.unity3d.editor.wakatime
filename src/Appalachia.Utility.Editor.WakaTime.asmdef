@@ -1,5 +1,5 @@
 {
-    "name": "Appalachia.Editor.WakaTime",
+    "name": "Appalachia.Utility.Editor.WakaTime",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [

@@ -12,7 +12,7 @@ using Application = UnityEngine.Device.Application;
 
 #endregion
 
-namespace Appalachia.Editor.WakaTime
+namespace Appalachia.Utility.Editor.WakaTime
 {
     internal static class WakaTime
     {
