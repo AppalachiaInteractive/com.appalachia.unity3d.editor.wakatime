@@ -2,13 +2,15 @@
 
 #region
 
+using System.Collections;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Unity.EditorCoroutines.Editor;
 using Unity.Profiling;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEngine.Device;
 using UnityEngine.SceneManagement;
-using Application = UnityEngine.Device.Application;
 
 #endregion
 
@@ -17,12 +19,18 @@ namespace Appalachia.Utility.Editor.WakaTime
     internal static class WakaTime
     {
         private const string _PRF_PFX = nameof(WakaTime) + ".";
-        
-        private static Heartbeat _lastHeartbeat;
         private static readonly object _sync = new();
 
+        private static Heartbeat _lastHeartbeat;
+        private static readonly ProfilerMarker _PRF_Initialize = new(_PRF_PFX + nameof(Initialize));
 
-        private static readonly ProfilerMarker _PRF_Initialize = new ProfilerMarker(_PRF_PFX + nameof(Initialize));
+        private static readonly ProfilerMarker _PRF_SendHeartbeat = new(_PRF_PFX + nameof(SendHeartbeat));
+
+        private static readonly ProfilerMarker _PRF_SendHeartbeatInternal =
+            new(_PRF_PFX + nameof(SendHeartbeatInternal));
+
+        private static readonly ProfilerMarker _PRF_OnScriptReload = new(_PRF_PFX + nameof(OnScriptReload));
+
         [InitializeOnLoadMethod]
         public static void Initialize()
         {
@@ -43,7 +51,6 @@ namespace Appalachia.Utility.Editor.WakaTime
                     return;
                 }
 
-
                 EditorApplication.delayCall += () =>
                 {
                     Logger.DebugLog("Initialized.  Sending first heartbeat...");
@@ -53,30 +60,31 @@ namespace Appalachia.Utility.Editor.WakaTime
             }
         }
 
-        private static readonly ProfilerMarker _PRF_SendHeartbeat = new ProfilerMarker(_PRF_PFX + nameof(SendHeartbeat));
         internal static void SendHeartbeat(
             bool fromSave = false,
             [CallerMemberName] string callerMemberName = "")
         {
             using (_PRF_SendHeartbeat.Auto())
             {
+                EditorCoroutineUtility.StartCoroutine(
+                    SendHeartbeatInternal(fromSave, callerMemberName),
+                    _sync
+                );
+            }
+        }
+
+        private static IEnumerator SendHeartbeatInternal(bool fromSave, string callerMemberName)
+        {
+            using (_PRF_SendHeartbeatInternal.Auto())
+            {
                 Logger.DebugLog(
                     $"[{callerMemberName}] Heartbeat generated - checking if it should be sent..."
                 );
 
-                lock (_sync)
-                {
-                    SendHeartbeatInternal(fromSave, callerMemberName);
-                }
-            }
-        }
-
-        private static readonly ProfilerMarker _PRF_SendHeartbeatInternal = new ProfilerMarker(_PRF_PFX + nameof(SendHeartbeatInternal));
-        private static void SendHeartbeatInternal(bool fromSave, string callerMemberName)
-        {
-            using (_PRF_SendHeartbeatInternal.Auto())
-            {
                 var scene = SceneManager.GetActiveScene();
+
+                yield return null;
+
                 var scenePath = scene.path;
                 var sceneFilePath = scenePath != string.Empty
                     ? Application.dataPath + "/" + scenePath.Substring("Assets/".Length)
@@ -86,19 +94,23 @@ namespace Appalachia.Utility.Editor.WakaTime
                 var timeSinceLastHeartbeat = heartbeat.time - _lastHeartbeat.time;
 
                 var processHeartbeat = fromSave ||
-                                       (timeSinceLastHeartbeat >
-                                        Constants.WakaTime.HeartbeatCooldown) ||
+                                       (timeSinceLastHeartbeat > Constants.WakaTime.HeartbeatCooldown) ||
                                        (heartbeat.entity != _lastHeartbeat.entity);
+
+                yield return null;
 
                 if (!processHeartbeat)
                 {
                     Logger.DebugLog($"[{callerMemberName}] Skipping this heartbeat.");
-                    return;
+                    yield break;
                 }
+
+                yield return null;
 
                 var wakatimePath = Configuration.WakaTimePath;
                 var cliTargetPath = $"\"{wakatimePath}\"";
 
+                yield return null;
                 var process = new Process();
                 var processStartInfo = new ProcessStartInfo
                 {
@@ -120,10 +132,19 @@ namespace Appalachia.Utility.Editor.WakaTime
 
                 process.StartInfo = processStartInfo;
 
+                yield return null;
+
                 process.Start();
 
+                yield return null;
+
                 var error = process.StandardError.ReadToEnd();
+
+                yield return null;
+
                 var output = process.StandardOutput.ReadToEnd();
+
+                yield return null;
 
                 if (string.Empty == error)
                 {
@@ -135,14 +156,13 @@ namespace Appalachia.Utility.Editor.WakaTime
                 {
                     Configuration.WakaTimePath = null;
                     Logger.Log(processStartInfo.Arguments);
-                    Logger.LogError(
-                        $"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin."
-                    );
+                    Logger.LogError($"Unable to utilize WakaTime CLI: [{error}].  Disable this plugin.");
                 }
+
+                yield return null;
             }
         }
 
-        private static readonly ProfilerMarker _PRF_OnScriptReload = new ProfilerMarker(_PRF_PFX + nameof(OnScriptReload));
         [DidReloadScripts]
         private static void OnScriptReload()
         {
